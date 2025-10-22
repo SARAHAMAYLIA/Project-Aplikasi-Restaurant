@@ -8,7 +8,7 @@ import 'dart:io';
 // ==========================================================
 // 1. UBAH DARI STATELESS MENJADI STATEFUL WIDGET
 // ==========================================================
-class HalamanProfil extends StatefulWidget { // <-- Diubah menjadi StatefulWidget
+class HalamanProfil extends StatefulWidget {
   final String email;
   const HalamanProfil({super.key, required this.email});
 
@@ -33,7 +33,8 @@ class _HalamanProfilState extends State<HalamanProfil> {
     Map<String, String> deviceData = {};
     try {
       if (Platform.isAndroid) {
-        final AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
+        final AndroidDeviceInfo androidInfo =
+            await deviceInfoPlugin.androidInfo;
         deviceData = {
           'Model Perangkat': '${androidInfo.manufacturer} ${androidInfo.model}',
           'Versi Android': androidInfo.version.release ?? 'N/A',
@@ -60,19 +61,23 @@ class _HalamanProfilState extends State<HalamanProfil> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(flex: 2, child: _BagianAtas(email: widget.email)), // <-- Gunakan widget.email
         Expanded(
-          flex: 3,
+          flex: 1,
+          child: _BagianAtas(email: widget.email),
+        ), // <-- Gunakan widget.email
+        Expanded(
+          flex: 4,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ListView( // <-- Ganti Column dengan ListView agar bisa di-scroll
+            child: ListView(
+              // <-- Ganti Column dengan ListView agar bisa di-scroll
               children: [
                 Text(
                   'Halo, ${widget.email}', // <-- Gunakan widget.email
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -81,13 +86,17 @@ class _HalamanProfilState extends State<HalamanProfil> {
                     FloatingActionButton.extended(
                       onPressed: () {},
                       elevation: 0,
-                      label: const Text("Status: Pelanggan Setia"), // Contoh perubahan teks
+                      label: const Text(
+                        "Status: Pelanggan Setia",
+                      ), // Contoh perubahan teks
                       icon: const Icon(Icons.verified_user_outlined),
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
-                _BarisInfoProfil(email: widget.email), // <-- Gunakan widget.email
+                _BarisInfoProfil(
+                  email: widget.email,
+                ), // <-- Gunakan widget.email
                 const SizedBox(height: 16),
 
                 // ==========================================================
@@ -110,10 +119,12 @@ class _HalamanProfilState extends State<HalamanProfil> {
                         ),
                         const Divider(),
                         if (_deviceData.isEmpty)
-                          const Center(child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(),
-                          ))
+                          const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
                         else
                           ..._deviceData.entries.map((entry) {
                             return ListTile(
@@ -133,11 +144,17 @@ class _HalamanProfilState extends State<HalamanProfil> {
                 // ==========================================================
                 Card(
                   elevation: 2,
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
                   child: Column(
                     children: [
                       ListTile(
-                        leading: const Icon(Icons.description_outlined, color: Colors.orange),
+                        leading: const Icon(
+                          Icons.description_outlined,
+                          color: Colors.orange,
+                        ),
                         title: const Text("Syarat & Ketentuan"),
                         trailing: const Icon(Icons.chevron_right),
                         onTap: () {
@@ -147,7 +164,8 @@ class _HalamanProfilState extends State<HalamanProfil> {
                               builder: (context) => const HalamanWebView(
                                 title: "Syarat & Ketentuan",
                                 // Ganti dengan URL asli milikmu
-                                url: "https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing",
+                                url:
+                                    "https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing",
                               ),
                             ),
                           );
@@ -155,7 +173,10 @@ class _HalamanProfilState extends State<HalamanProfil> {
                       ),
                       const Divider(height: 1, indent: 16, endIndent: 16),
                       ListTile(
-                        leading: const Icon(Icons.privacy_tip_outlined, color: Colors.orange),
+                        leading: const Icon(
+                          Icons.privacy_tip_outlined,
+                          color: Colors.orange,
+                        ),
                         title: const Text("Kebijakan Privasi"),
                         trailing: const Icon(Icons.chevron_right),
                         onTap: () {
@@ -165,7 +186,8 @@ class _HalamanProfilState extends State<HalamanProfil> {
                               builder: (context) => const HalamanWebView(
                                 title: "Kebijakan Privasi",
                                 // Ganti dengan URL asli milikmu
-                                url: "https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing",
+                                url:
+                                    "https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing",
                               ),
                             ),
                           );
@@ -196,8 +218,9 @@ class _BarisInfoProfil extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TransactionProvider>(
       builder: (context, transactionProvider, child) {
-        final transactionCount =
-            transactionProvider.transactionsForUser(email).length;
+        final transactionCount = transactionProvider
+            .transactionsForUser(email)
+            .length;
         final List<ItemInfoProfil> items = [
           ItemInfoProfil("Jumlah Transaksi", transactionCount),
           // Kamu bisa tambahkan item lain di sini jika mau
@@ -227,18 +250,18 @@ class _BarisInfoProfil extends StatelessWidget {
   }
 
   Widget _itemTunggal(BuildContext context, ItemInfoProfil item) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              item.nilai.toString(),
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-          ),
-          Text(item.judul, style: Theme.of(context).textTheme.bodySmall),
-        ],
-      );
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          item.nilai.toString(),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+      ),
+      Text(item.judul, style: Theme.of(context).textTheme.bodySmall),
+    ],
+  );
 }
 
 class ItemInfoProfil {
@@ -258,23 +281,26 @@ class _BagianAtas extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.only(bottom: 50),
+          //height: MediaQuery.of(context).size.height * 0.3,
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
+            color : Colors.orange,
+            /*gradient: LinearGradient(
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
-              colors: [Color(0xff0043ba), Color(0xff006df1)],
-            ),
+              /colors: [Color(0xff0043ba), Color(0xff006df1)],
+            ),*/
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(50),
               bottomRight: Radius.circular(50),
             ),
           ),
         ),
+
         Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(
-            width: 150,
-            height: 150,
+            width: 125,
+            height: 125,
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -286,21 +312,6 @@ class _BagianAtas extends StatelessWidget {
                       fit: BoxFit.cover,
                       // TIPS: Untuk gambar dari folder assets, gunakan AssetImage, bukan NetworkImage
                       image: AssetImage('assets/LOGO.png'),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                    child: Container(
-                      margin: const EdgeInsets.all(8.0),
-                      decoration: const BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle,
-                      ),
                     ),
                   ),
                 ),

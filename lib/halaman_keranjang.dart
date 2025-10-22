@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:menu_makanan/halaman_buktitransaksi.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
@@ -17,6 +18,12 @@ class HalamanKeranjang extends StatefulWidget {
 }
 
 class _HalamanKeranjangState extends State<HalamanKeranjang> {
+  final formatRupiah  = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp',
+      decimalDigits: 0,
+    );
+    
   // Fungsi untuk update keranjang
   void _updateKeranjang() {
     setState(() {});
@@ -65,113 +72,8 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
     );
   }
 
-  // Fungsi update jumlah item
-  void _updateJumlahItem(Produk produk, int jumlahBaru) {
-    if (jumlahBaru <= 0) {
-      _hapusItem(produk);
-      return;
-    }
-
-    setState(() {
-      final existingItemIndex = widget.keranjang.items.indexWhere(
-        (item) => item.produk.id == produk.id
-      );
-      
-      if (existingItemIndex != -1) {
-        widget.keranjang.hapusItem(produk);
-        
-        for (int i = 0; i < jumlahBaru; i++) {
-          widget.keranjang.tambahItem(produk);
-        }
-      }
-    });
-    
-    _showSnackBar('Jumlah ${produk.nama} diupdate!', Colors.blue);
-  }
-
-  // Dialog untuk update jumlah dengan text field - MOBILE FRIENDLY
-  void _showUpdateDialog(Produk produk, int jumlahSekarang) {
-    TextEditingController controller = TextEditingController(text: jumlahSekarang.toString());
-    
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Update Jumlah',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.orange.shade700,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  produk.nama,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: controller,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  decoration: InputDecoration(
-                    labelText: 'Jumlah',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        child: const Text('Batal'),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          final jumlahBaru = int.tryParse(controller.text) ?? jumlahSekarang;
-                          Navigator.of(context).pop();
-                          _updateJumlahItem(produk, jumlahBaru);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        child: const Text('Update'),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   // Fungsi checkout - MOBILE OPTIMIZED
-  void _checkout() {
+  void _bayar() {
     if (widget.keranjang.totalItem == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -348,7 +250,7 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
   // Widget untuk baris ringkasan - MOBILE FRIENDLY
   Widget _buildMobileSummaryRow(String label, double value, {bool isDiscount = false, bool isTotal = false}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -362,10 +264,10 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
           ),
           Text(
             isDiscount && value < 0 
-              ? '-Rp${value.abs().toStringAsFixed(0)}'
-              : 'Rp${value.toStringAsFixed(0)}',
+              ? '-${formatRupiah.format(value.abs())}'
+              : formatRupiah.format(value),
             style: TextStyle(
-              fontSize: isTotal ? 18 : 14,
+              fontSize: isTotal ? 16 : 14,
               fontWeight: FontWeight.bold,
               color: isDiscount ? Colors.green : (isTotal ? Colors.orange : Colors.black),
             ),
@@ -382,76 +284,6 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
     return Scaffold(
       body: Column(
         children: [
-          // Header info keranjang - MOBILE OPTIMIZED
-          if (widget.keranjang.items.isNotEmpty)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.orange.shade50, Colors.orange.shade100],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: SafeArea(
-                bottom: false,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Keranjang Anda',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.orange.shade800,
-                          ),
-                        ),
-                        Text(
-                          '${widget.keranjang.totalItem} item',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.orange.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Rp${widget.keranjang.hargaSetelahDiskon.toStringAsFixed(0)}',
-                          style: TextStyle(
-                            fontSize: isSmallScreen ? 14 : 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.orange.shade800,
-                          ),
-                        ),
-                        if (widget.keranjang.dapatDiskon)
-                          Text(
-                            'Hemat Rp10.000!',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
           // Banner diskon jika eligible - MOBILE OPTIMIZED
           if (widget.keranjang.dapatDiskon)
             Container(
@@ -559,7 +391,7 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                     isDiscount: widget.keranjang.dapatDiskon,
                   ),
                   
-                  const Divider(height: 16),
+                  const Divider(height: 14),
                   
                   // Total akhir
                   _buildMobileSummaryRow(
@@ -568,14 +400,14 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                     isTotal: true,
                   ),
                   
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   
                   // Tombol checkout
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    height: 40,
                     child: ElevatedButton(
-                      onPressed: _checkout,
+                      onPressed: _bayar,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,
                         foregroundColor: Colors.white,
@@ -591,7 +423,7 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                           Icon(Icons.payment, size: 20),
                           SizedBox(width: 8),
                           Text(
-                            'CHECKOUT',
+                            'BAYAR',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -646,12 +478,9 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
               ),
             ),
             const SizedBox(height: 24),
-            ElevatedButton(
+            /*ElevatedButton(
               onPressed: () {
-              // Kembali ke route pertama (biasanya beranda)
-              //Navigator.of(context).popUntil((route) => route.isFirst);
-              // Jika Anda menggunakan named route '/beranda', ganti dengan:
-              Navigator.of(context).pushNamedAndRemoveUntil('/beranda', (route) => false);
+              Navigator.of(context).pushNamed('/beranda');
               },
               style: ElevatedButton.styleFrom(
               backgroundColor: Colors.orange,
@@ -662,15 +491,14 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
               'Mulai Belanja',
               style: TextStyle(fontWeight: FontWeight.bold),
               ),
-            ),
+            ),*/
           ],
         ),
       ),
     );
   }
 
-  // Item keranjang untuk mobile
-  // Item keranjang untuk mobile - VERSI DIPERBAIKI
+
 Widget _buildMobileCartItem(ItemKeranjang item, double subtotal, int index) {
   final isSmallScreen = MediaQuery.of(context).size.width < 360;
   
@@ -725,7 +553,6 @@ Widget _buildMobileCartItem(ItemKeranjang item, double subtotal, int index) {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Gambar produk - lebih compact
             Container(
               width: 80,
               height: 80,
@@ -736,11 +563,6 @@ Widget _buildMobileCartItem(ItemKeranjang item, double subtotal, int index) {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: _buildSimpleImage(item.produk.gambar),
-             
-                /*image: DecorationImage(
-                  image: NetworkImage(item.produk.gambar),
-                  fit: BoxFit.cover,
-                ),*/
               ),
             ),
             
@@ -766,7 +588,7 @@ Widget _buildMobileCartItem(ItemKeranjang item, double subtotal, int index) {
                   
                   // Harga satuan
                   Text(
-                    'Rp${item.produk.harga.toStringAsFixed(0)}/item',
+                    '${formatRupiah.format(item.produk.harga)}/Item',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey.shade600,
@@ -838,51 +660,25 @@ Widget _buildMobileCartItem(ItemKeranjang item, double subtotal, int index) {
                               color: Colors.grey.shade500,
                             ),
                           ),
+                          /*Text(
+                            formatRupiah .format(subtotal),
+                            style: TextStyle(
+                              color: Colors.green.shade700,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                          ),*/
                           Text(
-                            'Rp${subtotal.toStringAsFixed(0)}',
+                            formatRupiah.format(subtotal),
                             style: const TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.bold,  
                               color: Colors.orange,
                             ),
                           ),
                         ],
                       ),
                     ],
-                  ),
-                  
-                  // Tombol edit jumlah (opsional, untuk akses cepat)
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      onTap: () {
-                        _showUpdateDialog(item.produk, item.jumlah);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.shade50,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.blue.shade200),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.edit, size: 12, color: Colors.blue.shade700),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Edit Jumlah',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.blue.shade700,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -893,169 +689,6 @@ Widget _buildMobileCartItem(ItemKeranjang item, double subtotal, int index) {
     ),
   );
 }
-  
-  
-  /*Widget _buildMobileCartItem(ItemKeranjang item, double subtotal, int index) {
-    final isSmallScreen = MediaQuery.of(context).size.width < 360;
-    
-    return Dismissible(
-      key: Key('${item.produk.id}_$index'),
-      background: Container(
-        color: Colors.red,
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
-        child: const Icon(Icons.delete_forever, color: Colors.white, size: 28),
-      ),
-      direction: DismissDirection.endToStart,
-      confirmDismiss: (direction) async {
-        return await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Hapus Item?'),
-              content: Text('Hapus ${item.produk.nama} dari keranjang?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text('Batal'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: const Text('Hapus', style: TextStyle(color: Colors.red)),
-                ),
-              ],
-            );
-          },
-        );
-      },
-      onDismissed: (direction) {
-        _hapusItem(item.produk);
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 4,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            // Gambar produk
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.horizontal(left: Radius.circular(12)),
-                image: DecorationImage(
-                  image: NetworkImage(item.produk.gambar),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            
-            // Info produk
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.produk.nama,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Rp${item.produk.harga.toStringAsFixed(0)}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Rp${subtotal.toStringAsFixed(0)}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange.shade700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            
-            // Kontrol jumlah
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Column(
-                children: [
-                  // Tombol edit
-                  IconButton(
-                    icon: Icon(Icons.edit, size: 18),
-                    color: Colors.blue,
-                    onPressed: () {
-                      _showUpdateDialog(item.produk, item.jumlah);
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
-                  ),
-                  
-                  // Kontrol jumlah
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      item.jumlah.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  
-                  // Tombol tambah/kurang
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.remove, size: 16),
-                        color: Colors.red,
-                        onPressed: () => _kurangiItem(item.produk),
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.add, size: 16),
-                        color: Colors.green,
-                        onPressed: () => _tambahItem(item.produk),
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }*/
   
   Widget _buildSimpleImage(String gambarPath) {
   try {

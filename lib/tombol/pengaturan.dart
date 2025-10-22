@@ -4,6 +4,8 @@ import 'package:menu_makanan/halaman_riwayat.dart';
 import 'package:provider/provider.dart';
 import 'package:menu_makanan/providers/theme_provider.dart';
 
+import '../halaman_webview.dart';
+
 class HalamanPengaturan extends StatefulWidget {
   final String email;
   const HalamanPengaturan({super.key, required this.email});
@@ -50,21 +52,36 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
             _SingleSection(
               title: "Umum",
               children: [
-                _CustomListTile(
-                  title: "Mode Gelap",
-                  icon: Icons.dark_mode_outlined,
+                ListTile(
+                  leading: const Icon(
+                    Icons.dark_mode_outlined,
+                    color: Colors.orange,
+                  ),
+                  title: const Text("Mode Gelap"),
                   trailing: Switch(
                     value: themeProvider.isDarkMode,
                     onChanged: (value) => themeProvider.toggleTheme(value),
                   ),
                 ),
-                const _CustomListTile(
-                  title: "Notifikasi",
-                  icon: Icons.notifications_none_rounded,
-                ),
-                const _CustomListTile(
-                  title: "Status Keamanan",
-                  icon: CupertinoIcons.lock_shield,
+                ListTile(
+                  leading: const Icon(
+                    Icons.language_outlined,
+                    color: Colors.orange,
+                  ),
+                  title: const Text ("Status Keamanan"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HalamanWebView(
+                          title: "Status Keamanan",
+                          // Ganti dengan URL asli milikmu
+                          url:
+                          "https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing",
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -72,9 +89,12 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
             _SingleSection(
               title: "Organisasi",
               children: [
-                _CustomListTile(
-                  title: "Profil",
-                  icon: Icons.person_outline_rounded,
+                ListTile(
+                  leading: const Icon(
+                    Icons.person_outline_rounded,
+                    color: Colors.orange,
+                  ),
+                  title: const Text("Profil"),
                   onTap:(){
                     Navigator.pushNamed(context, '/profil');  
                   },
@@ -83,9 +103,12 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                   title: "Keranjang",
                   icon: Icons.shopping_cart_checkout_outlined,
                 ),*/
-                _CustomListTile(
-                  title: "Riwayat Transaksi",
-                  icon: Icons.history_edu_outlined,
+                ListTile(
+                  leading: const Icon(
+                    Icons.history_edu_outlined,
+                    color: Colors.orange,
+                  ),
+                  title: const Text("Riwayat Transaksi"),
                   onTap: () {
                     // Navigator.of(context).pop(); // Consider if this is needed
                     Navigator.push(
@@ -101,14 +124,37 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
             const Divider(),
             _SingleSection(
               children: [
-                const _CustomListTile(
+                ListTile(
+                  leading: const Icon(
+                    Icons.info_outline_rounded,
+                    color: Colors.orange,
+                  ),
+                  title: const Text("Tentang"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HalamanWebView(
+                          title: "Tentang",
+                          // Ganti dengan URL asli milikmu
+                          url:
+                          "https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing",
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                /*const _CustomListTile(
                   title: "Tentang",
                   icon: Icons.info_outline_rounded,
                   onTap: null,
-                ),
-                _CustomListTile(
-                  title: "Keluar",
-                  icon: Icons.exit_to_app_rounded,
+                ),*/
+                ListTile(
+                  leading: const Icon(
+                    Icons.exit_to_app_rounded,
+                    color: Colors.orange,
+                  ),
+                  title: const Text ("Keluar"),
                   onTap: _logout,
                 ),
               ],
