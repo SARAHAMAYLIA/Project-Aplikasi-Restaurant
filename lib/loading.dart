@@ -75,85 +75,92 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
     final isSmallScreen = screenHeight < 700;
 
     return Scaffold(
-      backgroundColor: Colors.deepPurple[900],
-      body: SafeArea( // Tambahkan SafeArea untuk mobile
-        child: Center(
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return Opacity(
-                opacity: _fadeAnimation.value,
-                child: Transform.scale(
-                  scale: _scaleAnimation.value,
-                  child: child,
-                ),
-              );
-            },
-            child: SingleChildScrollView( // Untuk safety di small screens
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Logo Container dengan ukuran responsive
-                  Container(
-                    height: isSmallScreen ? 150 : 200,
-                    width: isSmallScreen ? 150 : 200,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.white, 
-                        width: isSmallScreen ? 2 : 3,
-                      ),
-                      image: const DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
-                        fit: BoxFit.cover,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
+        body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.orange, Colors.orangeAccent],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea( 
+          child: Center(
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _fadeAnimation.value,
+                  child: Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: child,
+                  ),
+                );
+              },
+              child: SingleChildScrollView( // Untuk safety di small screens
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: isSmallScreen ? 150 : 200,
+                      width: isSmallScreen ? 150 : 200,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white,
+                          width: isSmallScreen ? 2 : 3,
                         ),
-                      ],
+                        image: const DecorationImage(
+                          image: AssetImage('assets/LOGO.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  
-                  SizedBox(height: isSmallScreen ? 20 : 30),
-                  
-                  // Loading animation dengan ukuran responsive
-                  LoadingAnimationWidget.staggeredDotsWave(
-                    color: Colors.white,
-                    size: isSmallScreen ? 40 : 50,
-                  ),
-                  
-                  SizedBox(height: isSmallScreen ? 15 : 20),
-                  
-                  // Text dengan ukuran font responsive
-                  Text(
-                    'WARUNG KITA',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: isSmallScreen ? 18 : 20,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.5,
+
+                    SizedBox(height: isSmallScreen ? 20 : 30),
+
+
+                    LoadingAnimationWidget.staggeredDotsWave(
+                      color: Colors.white,
+                      size: isSmallScreen ? 40 : 50,
                     ),
-                  ),
-                  
-                  SizedBox(height: isSmallScreen ? 10 : 15),
-                  
-                  // Credit text dengan font size lebih kecil untuk mobile
-                  Text(
-                    'By Qolbun Halim Hidayatulloh\n24111814065',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: isSmallScreen ? 12 : 14,
-                      fontStyle: FontStyle.italic,
-                      height: 1.4,
+
+                    SizedBox(height: isSmallScreen ? 15 : 20),
+
+                    // Text dengan ukuran font responsive
+                    Text(
+                      'WARUNG KITA',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: isSmallScreen ? 18 : 20,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5,
+                      ),
                     ),
-                  ),
-                ],
+
+                    SizedBox(height: isSmallScreen ? 10 : 15),
+
+                    // Credit text dengan font size lebih kecil untuk mobile
+                    Text(
+                      'By Qolbun Halim Hidayatulloh\n24111814065',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: isSmallScreen ? 12 : 14,
+                        fontStyle: FontStyle.italic,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -5,9 +5,7 @@ import 'package:menu_makanan/halaman_webview.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io';
 
-// ==========================================================
-// 1. UBAH DARI STATELESS MENJADI STATEFUL WIDGET
-// ==========================================================
+
 class HalamanProfil extends StatefulWidget {
   final String email;
   const HalamanProfil({super.key, required this.email});
@@ -17,15 +15,12 @@ class HalamanProfil extends StatefulWidget {
 }
 
 class _HalamanProfilState extends State<HalamanProfil> {
-  // ==========================================================
-  // 2. TAMBAHKAN LOGIKA UNTUK DEVICE_INFO_PLUS
-  // ==========================================================
   Map<String, String> _deviceData = {}; // Variabel untuk simpan data perangkat
 
   @override
   void initState() {
     super.initState();
-    _getDeviceInfo(); // Panggil fungsi saat halaman dibuka
+    _getDeviceInfo(); 
   }
 
   Future<void> _getDeviceInfo() async {
@@ -64,13 +59,12 @@ class _HalamanProfilState extends State<HalamanProfil> {
         Expanded(
           flex: 1,
           child: _BagianAtas(email: widget.email),
-        ), // <-- Gunakan widget.email
+        ), 
         Expanded(
           flex: 4,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView(
-              // <-- Ganti Column dengan ListView agar bisa di-scroll
               children: [
                 Text(
                   'Halo, ${widget.email}', // <-- Gunakan widget.email
@@ -88,7 +82,7 @@ class _HalamanProfilState extends State<HalamanProfil> {
                       elevation: 0,
                       label: const Text(
                         "Status: Pelanggan Setia",
-                      ), // Contoh perubahan teks
+                      ), 
                       icon: const Icon(Icons.verified_user_outlined),
                     ),
                   ],
@@ -96,12 +90,9 @@ class _HalamanProfilState extends State<HalamanProfil> {
                 const SizedBox(height: 16),
                 _BarisInfoProfil(
                   email: widget.email,
-                ), // <-- Gunakan widget.email
+                ), 
                 const SizedBox(height: 16),
 
-                // ==========================================================
-                // 3. TAMBAHKAN CARD BARU UNTUK MENAMPILKAN INFO PERANGKAT
-                // ==========================================================
                 Card(
                   elevation: 2,
                   margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -139,9 +130,7 @@ class _HalamanProfilState extends State<HalamanProfil> {
                     ),
                   ),
                 ),
-                // ==========================================================
-                // TAMBAHKAN CARD BARU DI SINI
-                // ==========================================================
+            
                 Card(
                   elevation: 2,
                   margin: const EdgeInsets.symmetric(
@@ -165,7 +154,7 @@ class _HalamanProfilState extends State<HalamanProfil> {
                                 title: "Syarat & Ketentuan",
                                 // Ganti dengan URL asli milikmu
                                 url:
-                                    "https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing",
+                                    "https://drive.google.com/file/d/1HIqyw2_hWnozTk-qiqHxcvt5VlNIAYYp/view?usp=drivesdk",
                               ),
                             ),
                           );
@@ -187,7 +176,7 @@ class _HalamanProfilState extends State<HalamanProfil> {
                                 title: "Kebijakan Privasi",
                                 // Ganti dengan URL asli milikmu
                                 url:
-                                    "https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing",
+                                    "https://drive.google.com/file/d/1mFrBpbDOFbHiubDACQW1AMvIrCzX8s6g/view?usp=drivesdk",
                               ),
                             ),
                           );
@@ -206,9 +195,7 @@ class _HalamanProfilState extends State<HalamanProfil> {
   }
 }
 
-// =========================================================================
-// WIDGET-WIDGET DI BAWAH INI TIDAK PERLU DIUBAH
-// =========================================================================
+
 
 class _BarisInfoProfil extends StatelessWidget {
   final String email;
@@ -223,7 +210,6 @@ class _BarisInfoProfil extends StatelessWidget {
             .length;
         final List<ItemInfoProfil> items = [
           ItemInfoProfil("Jumlah Transaksi", transactionCount),
-          // Kamu bisa tambahkan item lain di sini jika mau
         ];
 
         return Container(
@@ -281,14 +267,8 @@ class _BagianAtas extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.only(bottom: 50),
-          //height: MediaQuery.of(context).size.height * 0.3,
           decoration: const BoxDecoration(
             color : Colors.orange,
-            /*gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              /colors: [Color(0xff0043ba), Color(0xff006df1)],
-            ),*/
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(50),
               bottomRight: Radius.circular(50),
@@ -310,7 +290,6 @@ class _BagianAtas extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      // TIPS: Untuk gambar dari folder assets, gunakan AssetImage, bukan NetworkImage
                       image: AssetImage('assets/LOGO.png'),
                     ),
                   ),

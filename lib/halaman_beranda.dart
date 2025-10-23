@@ -21,7 +21,7 @@ class HalamanBeranda extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Produk> produkList = DummyData.getProdukList();
-    final currencyFormatter = NumberFormat.currency(
+    final formatRupiah = NumberFormat.currency(
       locale: 'id_ID',
       symbol: 'Rp',
       decimalDigits: 0,
@@ -56,10 +56,10 @@ class HalamanBeranda extends StatelessWidget {
               
               if (isMobile) {
                 // MOBILE: Setiap baris 5 kolom, scroll vertikal untuk baris berikutnya
-                return _buildMobileVerticalScroll(produkList, currencyFormatter, context);
+                return _buildMobileVerticalScroll(produkList, formatRupiah, context);
               } else {
                 // DESKTOP/TABLET: Grid traditional
-                return _buildDesktopLayout(produkList, currencyFormatter, context, screenWidth);
+                return _buildDesktopLayout(produkList, formatRupiah, context, screenWidth);
               }
             },
           ),
@@ -83,25 +83,6 @@ class HalamanBeranda extends StatelessWidget {
 
     return Column(
       children: [
-        // Swipe indicator untuk baris horizontal
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 6),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            /*children: [
-              Icon(Icons.swipe_rounded, color: Colors.orange, size: 16),
-              SizedBox(width: 6),
-              Text(
-                'Setiap baris berisi 5 menu - Geser horizontal',
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 11,
-                ),
-              ),
-            ],*/
-          ),
-        ),
-        
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -129,33 +110,6 @@ class HalamanBeranda extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Optional: Row label (misal: "Menu Populer", "Rekomendasi", dll)
-        /*if (rowIndex == 0) ...[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: Text(
-              'Menu Populer',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: Colors.orange.shade700,
-              ),
-            ),
-          ),
-        ] else if (rowIndex == 1) ...[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: Text(
-              'Rekomendasi Hari Ini',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: Colors.orange.shade700,
-              ),
-            ),
-          ),
-        ],*/
-        
         Expanded(
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -266,8 +220,7 @@ class HalamanBeranda extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    
-                    // Harga
+                    // Harga produk
                     Text(
                       currencyFormatter.format(produk.harga),
                       style: TextStyle(
@@ -275,8 +228,7 @@ class HalamanBeranda extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 10,
                       ),
-                    ),
-                    
+                    ),                
                     // Tombol pesan
                     SizedBox(
                       width: double.infinity,
@@ -322,7 +274,7 @@ class HalamanBeranda extends StatelessWidget {
     BuildContext context,
     double screenWidth
   ) {
-    final crossAxisCount = screenWidth < 1000 ? 3 : 4;
+    final crossAxisCount = screenWidth < 100 ? 5 : 6;
     
     return GridView.builder(
       padding: const EdgeInsets.all(12),

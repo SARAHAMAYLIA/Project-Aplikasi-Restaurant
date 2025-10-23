@@ -27,7 +27,7 @@ class _HalamanDetailState extends State<HalamanDetail> {
   Widget build(BuildContext context) {
   
   // 2. BUAT OBJECT FORMATTER UNTUK MATA UANG RUPIAH
-    final currencyFormatter = NumberFormat.currency(
+    final formatRupiah = NumberFormat.currency(
       locale: 'id_ID', 
       symbol: 'Rp', 
       decimalDigits: 0
@@ -102,25 +102,13 @@ class _HalamanDetailState extends State<HalamanDetail> {
                       ),
                       const Spacer(),
                       Text(
-                        // ==========================================================
-                        // 3. GUNAKAN FORMATTER PADA HARGA PRODUK
-                        // ==========================================================
-                        currencyFormatter.format(widget.produk.harga),
-                        // ==========================================================
+                        formatRupiah.format(widget.produk.harga),
                         style: const TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
                         ),
                       ),
-                      /*Text(
-                        'Rp${widget.produk.harga}',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.orange,
-                        ),
-                      ),*/
                     ],
                   ),
                   const SizedBox(height: 16),

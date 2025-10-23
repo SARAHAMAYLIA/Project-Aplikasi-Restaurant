@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:menu_makanan/halaman_beranda.dart';
 import 'package:menu_makanan/halaman_keranjang.dart';
 import 'package:menu_makanan/model/keranjang.dart';
@@ -16,6 +17,11 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   final Keranjang _keranjang = Keranjang();
+  final formatRupiah = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: 'Rp',
+    decimalDigits: 0,
+  );
 
   late final List<String> _judulAppBar;
 
@@ -142,10 +148,10 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 const SizedBox(width: 2),
                 Text(
-                  'Rp${_keranjang.totalHarga.toStringAsFixed(0)}',
+                  formatRupiah.format(_keranjang.totalHarga),
                   style: const TextStyle(
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
                   ),
                 ),
               ],

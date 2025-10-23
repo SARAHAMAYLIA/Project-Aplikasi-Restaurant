@@ -8,7 +8,7 @@ import 'halaman_registrasi.dart';
 import 'package:menu_makanan/halaman_login.dart';
 import 'package:menu_makanan/halaman_password.dart';
 import 'package:menu_makanan/loading.dart';
-import 'package:menu_makanan/mainscreen.dart';
+import 'package:menu_makanan/halaman_appbar.dart';
 import 'package:menu_makanan/providers/theme_provider.dart';
 import 'package:menu_makanan/providers/transaction_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
           title: 'Warung Kita',
           themeMode: themeProvider.themeMode,
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.orange,
             brightness: Brightness.light,
             // Tambahan untuk mobile
             visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -70,7 +70,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Simulasi database lokal
 Map<String, String> fakeDatabase = {};
 
 // ======================================================
@@ -108,9 +107,6 @@ Offset _getBeginOffset(AxisDirection direction) {
   }
 }
 
-// ======================================================
-// AUTH SCAFFOLD (RESPONSIVE LAYOUT - MOBILE FIRST)
-// ======================================================
 class AuthScaffold extends StatelessWidget {
   final String title;
   final Widget fields;
@@ -159,7 +155,7 @@ class AuthScaffold extends StatelessWidget {
                       color: Colors.white.withOpacity(0.95), // Sedikit lebih opaque untuk mobile
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black12,
+                          color: Colors.black,
                           blurRadius: isMobile ? 5 : 10,
                         )
                       ],
@@ -188,7 +184,7 @@ class AuthScaffold extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.blueAccent],
+                colors: [Colors.orange, Colors.orangeAccent],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -236,6 +232,7 @@ class AuthScaffold extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 20, // Sedikit lebih kecil untuk mobile
                     fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -254,7 +251,7 @@ class AuthScaffold extends StatelessWidget {
     return Row(
       children: [
         _buildFormSection(context),
-        _buildBlueSection(),
+        _buildOrangeSection(),
       ],
     );
   }
@@ -270,6 +267,7 @@ class AuthScaffold extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
+                  color: Colors.black,
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
@@ -292,24 +290,26 @@ class AuthScaffold extends StatelessWidget {
         Text(
           bottomText,
           style: const TextStyle(fontSize: 14),
+          selectionColor: Colors.black,
         ),
         TextButton(
           onPressed: onBottomButtonPressed,
           child: Text(
             bottomButtonText,
             style: const TextStyle(fontSize: 14),
+            selectionColor: Colors.black,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildBlueSection() {
+  Widget _buildOrangeSection() {
     return Expanded(
       child: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue, Colors.blueAccent],
+            colors: [Colors.orange, Colors.orangeAccent],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

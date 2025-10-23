@@ -20,7 +20,7 @@ class HalamanKeranjang extends StatefulWidget {
 class _HalamanKeranjangState extends State<HalamanKeranjang> {
   final formatRupiah  = NumberFormat.currency(
       locale: 'id_ID',
-      symbol: 'Rp',
+      symbol: 'Rp ',
       decimalDigits: 0,
     );
     
@@ -478,20 +478,6 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
               ),
             ),
             const SizedBox(height: 24),
-            /*ElevatedButton(
-              onPressed: () {
-              Navigator.of(context).pushNamed('/beranda');
-              },
-              style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: Text(
-              'Mulai Belanja',
-              style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),*/
           ],
         ),
       ),
@@ -660,14 +646,6 @@ Widget _buildMobileCartItem(ItemKeranjang item, double subtotal, int index) {
                               color: Colors.grey.shade500,
                             ),
                           ),
-                          /*Text(
-                            formatRupiah .format(subtotal),
-                            style: TextStyle(
-                              color: Colors.green.shade700,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                            ),
-                          ),*/
                           Text(
                             formatRupiah.format(subtotal),
                             style: const TextStyle(

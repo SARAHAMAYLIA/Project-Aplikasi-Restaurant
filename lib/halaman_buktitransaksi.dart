@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:menu_makanan/mainscreen.dart';
+import 'package:intl/intl.dart';
+import 'package:menu_makanan/halaman_appbar.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 
 class HalamanBuktiTransaksi extends StatelessWidget {
@@ -18,10 +19,14 @@ class HalamanBuktiTransaksi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // PERBAIKAN: Gunakan harga setelah diskon dari keranjang
     final totalAkhir = keranjang.hargaSetelahDiskon;
     final dapatDiskon = keranjang.dapatDiskon;
     final jumlahDiskon = keranjang.jumlahDiskon;
+    final formatRupiah = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp ',
+      decimalDigits: 0,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -75,7 +80,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                           Icon(Icons.discount, color: Colors.orange, size: 16),
                           SizedBox(width: 6),
                           Text(
-                            'Anda hemat Rp${jumlahDiskon.toStringAsFixed(0)}!',
+                            'Anda Hemat ${formatRupiah.format(jumlahDiskon)}!',
                             style: TextStyle(
                               color: Colors.orange.shade800,
                               fontWeight: FontWeight.bold,
@@ -175,6 +180,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                     const SizedBox(height: 16),
                     
                     // Subtotal
+                    //formatRupiah.format('Subtotal', jumlahDiskon),
                     _buildSummaryRow('Subtotal', keranjang.totalHarga),
                     
                     // Diskon
@@ -336,7 +342,7 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                   if (dapatDiskon) ...[
                     const SizedBox(height: 4),
                     Text(
-                      'Anda berhasil menghemat Rp${jumlahDiskon.toStringAsFixed(0)} dengan diskon spesial!',
+                      'Anda berhasil menghemat ${formatRupiah.format(jumlahDiskon)} dengan diskon spesial!',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.green.shade600,
@@ -381,7 +387,12 @@ class HalamanBuktiTransaksi extends StatelessWidget {
 
   Widget _buildItemRow(ItemKeranjang item) {
     final subtotal = item.produk.harga * item.jumlah;
-    
+    final formatRupiah  = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp ',
+      decimalDigits: 0,
+    );
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
@@ -417,15 +428,15 @@ class HalamanBuktiTransaksi extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '${item.jumlah} x Rp${item.produk.harga.toStringAsFixed(0)}',
+                  '${item.jumlah} x ${formatRupiah.format(item.produk.harga)}',
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 ),
               ],
             ),
           ),
           Text(
-            'Rp${subtotal.toStringAsFixed(0)}',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            '${formatRupiah.format(subtotal)}',
+            style: const TextStyle(fontWeight: FontWeight.w500),
           ),
         ],
       ),
@@ -433,8 +444,14 @@ class HalamanBuktiTransaksi extends StatelessWidget {
   }
 
   Widget _buildSummaryRow(String label, double value, {bool isDiscount = false, bool isTotal = false}) {
+    final formatRupiah  = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp ',
+      decimalDigits: 0,
+    );
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -442,18 +459,18 @@ class HalamanBuktiTransaksi extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: isTotal ? 16 : 14,
-              color: isDiscount ? Colors.green : (isTotal ? Colors.orange : Colors.grey.shade600),
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+              color: isDiscount ? Colors.green : Colors.grey.shade700,
             ),
           ),
           Text(
-            isDiscount && value < 0 
-              ? '-Rp${value.abs().toStringAsFixed(0)}' 
-              : 'Rp${value.toStringAsFixed(0)}',
+            isDiscount && value < 0
+                ? '-${formatRupiah.format(value.abs())}'
+                : formatRupiah.format(value),
             style: TextStyle(
-              fontSize: isTotal ? 18 : 14,
-              color: isDiscount ? Colors.green : (isTotal ? Colors.orange : Colors.black),
+              fontSize: isTotal ? 16 : 14,
               fontWeight: FontWeight.bold,
+              color: isDiscount ? Colors.green : (isTotal ? Colors.orange : Colors.black),
             ),
           ),
         ],

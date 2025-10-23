@@ -17,6 +17,11 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
   Widget build(BuildContext context) {
     final transactionProvider = Provider.of<TransactionProvider>(context);
     final transactions = transactionProvider.transactionsForUser(widget.email);
+    final formatRupiah  = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp',
+      decimalDigits: 0,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -93,7 +98,7 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Tanggal: ${DateFormat('dd MMMM yyyy, HH:mm').format(transaksi.waktuTransaksi)}'),
-                          Text('Total: Rp${transaksi.keranjang.totalHarga.toStringAsFixed(0)}'),
+                          Text('Total: ${formatRupiah.format(transaksi.keranjang.totalHarga)}'),
                         ],
                       ),
                       trailing: const Icon(Icons.arrow_forward_ios),

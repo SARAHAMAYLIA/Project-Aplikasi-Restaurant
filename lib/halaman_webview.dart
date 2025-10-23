@@ -17,21 +17,21 @@ class HalamanWebView extends StatefulWidget {
 }
 
 class _HalamanWebViewState extends State<HalamanWebView> {
-  // Controller untuk mengelola webview
+  
   late final WebViewController _controller;
-  bool _isLoading = true; // State untuk menunjukkan loading
+  bool _isLoading = true; 
 
   @override
   void initState() {
     super.initState();
 
-    // Inisialisasi controller
+   
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageFinished: (String url) {
-            // Hentikan loading saat halaman selesai dimuat
+            
             if (mounted) {
               setState(() {
                 _isLoading = false;
@@ -40,7 +40,7 @@ class _HalamanWebViewState extends State<HalamanWebView> {
           },
         ),
       )
-      ..loadRequest(Uri.parse(widget.url)); // Muat URL yang diberikan
+      ..loadRequest(Uri.parse(widget.url));
   }
 
   @override
@@ -50,7 +50,7 @@ class _HalamanWebViewState extends State<HalamanWebView> {
         title: Text(widget.title),
         backgroundColor: Colors.orange,
       ),
-      // Gunakan Stack untuk menumpuk loading indicator di atas webview
+      
       body: Stack(
         children: [
           WebViewWidget(controller: _controller),

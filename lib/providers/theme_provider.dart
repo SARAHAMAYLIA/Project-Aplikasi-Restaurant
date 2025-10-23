@@ -11,11 +11,4 @@ class ThemeProvider with ChangeNotifier {
     _themeMode = isOn ? ThemeMode.dark : ThemeMode.light;
     notifyListeners();
   }
-
-  // Optionally, load initial theme from preferences
-  // void loadTheme() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   _themeMode = prefs.getBool('isDarkMode') ?? false ? ThemeMode.dark : ThemeMode.light;
-  //   notifyListeners();
-  // }
 }

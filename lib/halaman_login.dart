@@ -15,17 +15,16 @@ class _HalamanLoginState extends State<HalamanLogin> {
   final passwordController = TextEditingController();
   bool isPasswordVisible = false;
   String errorMessage = "";
-  bool rememberMe = false; // <-- 2. TAMBAHKAN STATE UNTUK CHECKBOX
+  bool rememberMe = true; 
 
-  // 3. UBAH FUNGSI LOGIN MENJADI ASYNC
   void _login() async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
     if (fakeDatabase.containsKey(email) && fakeDatabase[email] == password) {
-      // Jika login berhasil
+      
       if (rememberMe) {
-        // Jika "Ingat Saya" dicentang, simpan email
+        
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('user_email', email);
       }
@@ -89,19 +88,18 @@ class _HalamanLoginState extends State<HalamanLogin> {
             Text(errorMessage, style: const TextStyle(color: Colors.red)),
           ],
           const SizedBox(height: 20),
-          // Tombol Login (tidak diubah)
           SizedBox(
             width: double.infinity,
             height: 45,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.orange,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
               onPressed: _login,
-              child: const Text("LOGIN"),
+              child: const Text('LOGIN'),
             ),
           ),
           // Remember & Forgot
@@ -110,7 +108,7 @@ class _HalamanLoginState extends State<HalamanLogin> {
             children: [
               Row(
                 children: [
-                  // 4. BUAT CHECKBOX MENJADI AKTIF
+                  
                   Checkbox(
                     value: rememberMe,
                     onChanged: (val) {

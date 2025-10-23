@@ -10,15 +10,17 @@ class HalamanLupaPassword extends StatefulWidget {
 }
 
 class _HalamanLupaPasswordState extends State<HalamanLupaPassword> {
-  final _emailController = TextEditingController();
+  final emailController = TextEditingController();
   String message = "";
 
   void _resetPassword() {
-    String email = _emailController.text.trim();
+    String email = emailController.text.trim();
 
     if (fakeDatabase.containsKey(email)) {
-      setState(() =>
-          message = "Link reset password dikirim ke email: $email (simulasi)");
+      setState(
+        () =>
+            message = "Link reset password dikirim ke email: $email (simulasi)",
+      );
     } else {
       setState(() => message = "Email tidak terdaftar!");
     }
@@ -26,8 +28,6 @@ class _HalamanLupaPasswordState extends State<HalamanLupaPassword> {
 
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    
     return AuthScaffold(
       title: "Lupa Password",
       fields: Column(
@@ -43,31 +43,33 @@ class _HalamanLupaPasswordState extends State<HalamanLupaPassword> {
             ),
           ),
           const SizedBox(height: 20),
-          
+
           const Text(
             "Kami akan mengirimkan tautan pengaturan ulang kata sandi ke email Anda",
             style: TextStyle(color: Colors.grey, fontSize: 13),
           ),
           const SizedBox(height: 20),
           SizedBox(
-                width: double.infinity,
-                height: 45,
-                child: ElevatedButton(
-                  style : ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  ),
+            width: double.infinity,
+            height: 45,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
               onPressed: _resetPassword,
               child: const Text("KIRIM LINK RESET"),
             ),
           ),
           if (message.isNotEmpty) ...[
             const SizedBox(height: 10),
-            Text(message, style: const TextStyle(color: Colors.blue)),
+            Text(message, style: const TextStyle(color: Colors.red)),
           ],
         ],
       ),
-      
+
       bottomText: "Ingat kata sandi Anda?",
       bottomButtonText: "Kembali Login",
       onBottomButtonPressed: () {

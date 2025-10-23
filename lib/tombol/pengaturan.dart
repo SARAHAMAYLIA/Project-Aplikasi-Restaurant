@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:menu_makanan/halaman_about_us.dart';
 import 'package:menu_makanan/halaman_riwayat.dart';
+import 'package:menu_makanan/main.dart';
 import 'package:provider/provider.dart';
 import 'package:menu_makanan/providers/theme_provider.dart';
-
 import '../halaman_webview.dart';
 
 class HalamanPengaturan extends StatefulWidget {
@@ -46,7 +46,6 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
 
     return Center(
       child: Container(
-        //constraints: const BoxConstraints(maxWidth: 400),
         child: ListView(
           children: [
             _SingleSection(
@@ -65,7 +64,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                 ),
                 ListTile(
                   leading: const Icon(
-                    Icons.language_outlined,
+                    Icons.security_outlined,
                     color: Colors.orange,
                   ),
                   title: const Text ("Status Keamanan"),
@@ -99,10 +98,6 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                     Navigator.pushNamed(context, '/profil');  
                   },
                 ),
-                /*const _CustomListTile(
-                  title: "Keranjang",
-                  icon: Icons.shopping_cart_checkout_outlined,
-                ),*/
                 ListTile(
                   leading: const Icon(
                     Icons.history_edu_outlined,
@@ -110,7 +105,6 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                   ),
                   title: const Text("Riwayat Transaksi"),
                   onTap: () {
-                    // Navigator.of(context).pop(); // Consider if this is needed
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -129,26 +123,30 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                     Icons.info_outline_rounded,
                     color: Colors.orange,
                   ),
-                  title: const Text("Tentang"),
+                  title: const Text("About Us"),
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      animatedRoute(const AboutUs(), direction: AxisDirection.down),
+                      /*MaterialPageRoute(
                         builder: (context) => const HalamanWebView(
-                          title: "Tentang",
+                          title: "About Us",
                           // Ganti dengan URL asli milikmu
                           url:
                           "https://drive.google.com/drive/folders/1YUHXOt886dwnQr8IpQN9u4GtCKXp5PL_?usp=sharing",
                         ),
-                      ),
+                      ),*/
                     );
                   },
                 ),
-                /*const _CustomListTile(
-                  title: "Tentang",
-                  icon: Icons.info_outline_rounded,
-                  onTap: null,
-                ),*/
+                ListTile(
+                  leading: const Icon(
+                    Icons.exit_to_app_rounded,
+                    color: Colors.orange,
+                  ),
+                  title: const Text ("Tentang Aplikasi"),
+                  onTap: _tentangaplikasi,
+                ),
                 ListTile(
                   leading: const Icon(
                     Icons.exit_to_app_rounded,
@@ -164,30 +162,25 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
       ),
     );
   }
-}
 
-class _CustomListTile extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final Widget? trailing;
-  final VoidCallback? onTap;
-  const _CustomListTile({
-    required this.title,
-    required this.icon,
-    this.trailing,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      leading: Icon(icon),
-      trailing: trailing,
-      onTap: onTap,
+  void _tentangaplikasi() {
+    showAboutDialog(
+      context: context,
+      applicationName: 'Menu Makanan',
+      applicationVersion: '1.0.0',
+      applicationLegalese: '© 2025 Menu Makanan',
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 15),
+          child: Text(
+              'Aplikasi Menu Makanan adalah platform yang menyediakan berbagai pilihan menu makanan lezat dan bergizi untuk memenuhi kebutuhan kuliner Anda.'),
+        ),
+      ],
     );
   }
+
 }
+
 
 class _SingleSection extends StatelessWidget {
   final String? title;
