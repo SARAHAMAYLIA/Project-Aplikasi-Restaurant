@@ -93,9 +93,9 @@ class _HalamanLokasiState extends State<HalamanLokasi> {
         );
       }
 
-      // Jika ada focusId, set kamera position ke lokasi tersebut (jika ditemukan)
+      // Jika ada focusId, cari lokasi fokus lalu set kamera position ke lokasi tersebut.
+      LokasiPenjual? fokusLokasi;
       if (widget.focusId != null) {
-        LokasiPenjual? fokusLokasi;
         try {
           fokusLokasi = lokasiList.firstWhere((l) => l.id == widget.focusId);
         } catch (e) {
@@ -111,6 +111,19 @@ class _HalamanLokasiState extends State<HalamanLokasi> {
         markers = markerSet;
         _isLoading = false;
       });
+
+      // Tampilkan bottom sheet detail otomatis jika ada fokus
+      if (fokusLokasi != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          // Jika map controller sudah tersedia, animate camera
+          try {
+            mapController?.animateCamera(
+              CameraUpdate.newLatLngZoom(fokusLokasi!.latLng, 16),
+            );
+          } catch (_) {}
+          _showLokasiDetail(fokusLokasi!);
+        });
+      }
     } catch (e) {
       debugPrint('Error loading lokasi penjual: $e');
       setState(() {
@@ -322,8 +335,6 @@ class _HalamanLokasiState extends State<HalamanLokasi> {
                     mapController = controller;
                   },
                 ),
-
-                // Search bar di atas
                 Positioned(
                   top: 16,
                   left: 16,

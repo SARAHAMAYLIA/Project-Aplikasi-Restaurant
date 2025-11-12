@@ -18,7 +18,13 @@ class LokasiPenjualService {
       jamTutup: '22:00',
       rating: 4.5,
       fotoUrl: 'assets/LOGO.png',
-      kategoriMakanan: ['Nasi Goreng', 'Mie Ayam', 'Soto Ayam'],
+      kategoriMakanan: [
+        'Nasi Goreng',
+        'Mie Ayam',
+        'Soto Ayam',
+        'Es Teh Manis',
+        'Jus Alpukat',
+      ],
     ),
     LokasiPenjual(
       id: '2',
@@ -31,7 +37,7 @@ class LokasiPenjualService {
       jamTutup: '23:00',
       rating: 4.7,
       fotoUrl: 'assets/LOGO.png',
-      kategoriMakanan: ['Bakso', 'Lumpia', 'Martabak'],
+      kategoriMakanan: ['Bakso', 'Lumpia', 'Martabak', 'Es Jeruk', 'Cendol'],
     ),
     LokasiPenjual(
       id: '3',
@@ -44,7 +50,12 @@ class LokasiPenjualService {
       jamTutup: '22:00',
       rating: 4.3,
       fotoUrl: 'assets/LOGO.png',
-      kategoriMakanan: ['Es Cendol', 'Es Jeruk', 'Teh Manis'],
+      kategoriMakanan: [
+        'Es Cendol',
+        'Es Teller',
+        'Es Teh Manis',
+        'Matcha Latte',
+      ],
     ),
     LokasiPenjual(
       id: '4',
@@ -57,7 +68,13 @@ class LokasiPenjualService {
       jamTutup: '21:30',
       rating: 4.6,
       fotoUrl: 'assets/LOGO.png',
-      kategoriMakanan: ['Rendang', 'Sate Ayam', 'Gado-Gado'],
+      kategoriMakanan: [
+        'Rendang',
+        'Sate Ayam',
+        'Gado-Gado',
+        'Crispy Calamari',
+        'Sunrise Paradise',
+      ],
     ),
     LokasiPenjual(
       id: '5',
@@ -70,7 +87,14 @@ class LokasiPenjualService {
       jamTutup: '23:30',
       rating: 4.4,
       fotoUrl: 'assets/LOGO.png',
-      kategoriMakanan: ['Crispy Calamari', 'Pasta', 'Steak'],
+      kategoriMakanan: [
+        'Classic Rib-Eye Steak',
+        'Panna Cotta Mangga',
+        'spaghetti carbonara',
+        'puding gyukaku',
+        'caffe latte',
+        'French fries',
+      ],
     ),
   ];
 
@@ -112,6 +136,20 @@ class LokasiPenjualService {
         .where(
           (lokasi) => lokasi.kategoriMakanan.any(
             (k) => k.toLowerCase().contains(kategori.toLowerCase()),
+          ),
+        )
+        .toList();
+  }
+
+  // Cari lokasi penjual berdasarkan nama menu (item dalam kategoriMakanan)
+  static Future<List<LokasiPenjual>> cariLokasiPenjualByNamaMenu(
+    String namaMenu,
+  ) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    return _dummyLokasiPenjual
+        .where(
+          (lokasi) => lokasi.kategoriMakanan.any(
+            (menu) => menu.toLowerCase().contains(namaMenu.toLowerCase()),
           ),
         )
         .toList();

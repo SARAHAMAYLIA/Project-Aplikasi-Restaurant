@@ -202,20 +202,12 @@ class _HalamanDetailState extends State<HalamanDetail> {
                     height: 44,
                     child: OutlinedButton.icon(
                       onPressed: () async {
-                        // Cari lokasi penjual berdasarkan kategori (jika makanan) atau nama produk
+                        // Cari lokasi penjual berdasarkan nama menu (cocok untuk Makanan & Minuman)
                         List results = [];
-                        if (widget.produk is Makanan) {
-                          final kategori = (widget.produk as Makanan).kategori;
-                          results =
-                              await LokasiPenjualService.cariLokasiPenjualByKategori(
-                                kategori,
-                              );
-                        } else {
-                          results =
-                              await LokasiPenjualService.cariLokasiPenjualByNama(
-                                widget.produk.nama,
-                              );
-                        }
+                        results =
+                            await LokasiPenjualService.cariLokasiPenjualByNamaMenu(
+                              widget.produk.nama,
+                            );
 
                         if (results.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
