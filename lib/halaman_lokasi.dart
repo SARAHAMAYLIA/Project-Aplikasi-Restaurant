@@ -6,7 +6,10 @@ import 'package:menu_makanan/model/lokasi_penjual.dart';
 import 'package:menu_makanan/services/lokasi_penjual_service.dart';
 
 class HalamanLokasi extends StatefulWidget {
-  const HalamanLokasi({super.key});
+  final List<String>? filterIds; // optional list of lokasi IDs to highlight
+  final String? focusId; // optional single lokasi ID to focus camera on
+
+  const HalamanLokasi({super.key, this.filterIds, this.focusId});
 
   @override
   State<HalamanLokasi> createState() => _HalamanLokasiState();
@@ -65,6 +68,8 @@ class _HalamanLokasiState extends State<HalamanLokasi> {
 
       Set<Marker> markerSet = {};
       for (var lokasi in lokasiList) {
+        final isHighlighted =
+            widget.filterIds != null && widget.filterIds!.contains(lokasi.id);
         markerSet.add(
           Marker(
             markerId: MarkerId(lokasi.id),
@@ -75,8 +80,26 @@ class _HalamanLokasiState extends State<HalamanLokasi> {
               onTap: () => _showLokasiDetail(lokasi),
             ),
             onTap: () => _showLokasiDetail(lokasi),
+            icon: isHighlighted
+                ? BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueOrange,
+                  )
+                : BitmapDescriptor.defaultMarker,
           ),
         );
+      }
+
+      // Jika ada focusId, set kamera position ke lokasi tersebut (jika ditemukan)
+      if (widget.focusId != null) {
+        LokasiPenjual? fokusLokasi;
+        try {
+          fokusLokasi = lokasiList.firstWhere((l) => l.id == widget.focusId);
+        } catch (e) {
+          fokusLokasi = lokasiList.isNotEmpty ? lokasiList.first : null;
+        }
+        if (fokusLokasi != null) {
+          _kameraPosition = fokusLokasi.latLng;
+        }
       }
 
       setState(() {
