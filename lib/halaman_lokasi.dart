@@ -4,6 +4,7 @@ import 'package:location/location.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:menu_makanan/model/lokasi_penjual.dart';
 import 'package:menu_makanan/services/lokasi_penjual_service.dart';
+import 'package:menu_makanan/services/lokasi_penjual_api.dart';
 
 class HalamanLokasi extends StatefulWidget {
   final List<String>? filterIds; // optional list of lokasi IDs to highlight
@@ -64,7 +65,10 @@ class _HalamanLokasiState extends State<HalamanLokasi> {
 
   Future<void> _loadLokasiPenjual() async {
     try {
-      final lokasiList = await LokasiPenjualService.getSemuaLokasiPenjual();
+      // On web, prefer fetching from the local dev API server if available.
+      final lokasiList = kIsWeb
+          ? await LokasiPenjualApi.fetchSemuaLokasi()
+          : await LokasiPenjualService.getSemuaLokasiPenjual();
 
       Set<Marker> markerSet = {};
       for (var lokasi in lokasiList) {

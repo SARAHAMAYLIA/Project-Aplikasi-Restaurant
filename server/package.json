@@ -1,0 +1,15 @@
+{
+  "name": "warung-kita-locations-server",
+  "version": "0.1.0",
+  "description": "Dev API server that returns seller locations for the Flutter app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "dev",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}

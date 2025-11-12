@@ -16,6 +16,7 @@ import 'package:menu_makanan/halaman_login.dart';
 import 'package:menu_makanan/halaman_password.dart';
 import 'package:menu_makanan/loading.dart';
 import 'package:menu_makanan/halaman_appbar.dart';
+import 'package:menu_makanan/halaman_lokasi.dart';
 import 'package:menu_makanan/providers/theme_provider.dart';
 import 'package:menu_makanan/providers/transaction_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -153,6 +154,18 @@ class MyApp extends StatelessWidget {
             final extra = state.extra as Map<String, dynamic>?;
             final email = extra?['email'] as String? ?? '';
             return MainScreen(email: email);
+          },
+        ),
+        GoRoute(
+          name: 'lokasi',
+          path: '/lokasi',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final filterIds = (extra != null && extra['filterIds'] is List)
+                ? List<String>.from(extra['filterIds'] as List)
+                : null;
+            final focusId = extra != null ? extra['focusId'] as String? : null;
+            return HalamanLokasi(filterIds: filterIds, focusId: focusId);
           },
         ),
       ],

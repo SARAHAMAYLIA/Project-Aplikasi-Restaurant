@@ -32,18 +32,60 @@ class LokasiPenjual {
 
   // Buat dari JSON
   factory LokasiPenjual.fromJson(Map<String, dynamic> json) {
+    // Accept both camelCase and snake_case keys from different sources
+    String _getString(
+      Map<String, dynamic> m,
+      List<String> keys, [
+      String def = '',
+    ]) {
+      for (var k in keys) {
+        if (m.containsKey(k) && m[k] != null) return m[k].toString();
+      }
+      return def;
+    }
+
+    double _getDouble(
+      Map<String, dynamic> m,
+      List<String> keys, [
+      double def = 0,
+    ]) {
+      for (var k in keys) {
+        if (m.containsKey(k) && m[k] != null) return (m[k] as num).toDouble();
+      }
+      return def;
+    }
+
+    List<String> _getStringList(Map<String, dynamic> m, List<String> keys) {
+      for (var k in keys) {
+        if (m.containsKey(k) && m[k] != null) {
+          final value = m[k];
+          if (value is List)
+            return List<String>.from(value.map((e) => e.toString()));
+        }
+      }
+      return <String>[];
+    }
+
     return LokasiPenjual(
-      id: json['id'] as String,
-      nama: json['nama'] as String,
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
-      alamat: json['alamat'] as String,
-      nomorTelepon: json['nomor_telepon'] as String,
-      jamBuka: json['jam_buka'] as String,
-      jamTutup: json['jam_tutup'] as String,
-      rating: (json['rating'] as num).toDouble(),
-      fotoUrl: json['foto_url'] as String,
-      kategoriMakanan: List<String>.from(json['kategori_makanan'] as List),
+      id: _getString(json, ['id', 'Id']),
+      nama: _getString(json, ['nama', 'name']),
+      latitude: _getDouble(json, ['latitude', 'lat']),
+      longitude: _getDouble(json, ['longitude', 'lng', 'lon']),
+      alamat: _getString(json, ['alamat', 'address']),
+      nomorTelepon: _getString(json, [
+        'nomor_telepon',
+        'nomorTelepon',
+        'phone',
+      ]),
+      jamBuka: _getString(json, ['jam_buka', 'jamBuka', 'open']),
+      jamTutup: _getString(json, ['jam_tutup', 'jamTutup', 'close']),
+      rating: _getDouble(json, ['rating']),
+      fotoUrl: _getString(json, ['foto_url', 'fotoUrl', 'photo', 'image']),
+      kategoriMakanan: _getStringList(json, [
+        'kategori_makanan',
+        'kategoriMakanan',
+        'categories',
+      ]),
     );
   }
 

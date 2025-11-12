@@ -6,6 +6,8 @@ import 'package:menu_makanan/bloc/cart_event.dart';
 import 'package:menu_makanan/model/makanan.dart';
 import 'package:menu_makanan/model/minuman.dart';
 import 'package:menu_makanan/model/produk.dart';
+import 'package:menu_makanan/services/lokasi_penjual_service.dart';
+import 'package:go_router/go_router.dart';
 import 'package:animated_rating_stars/animated_rating_stars.dart';
 
 class HalamanDetail extends StatefulWidget {
@@ -139,49 +141,105 @@ class _HalamanDetailState extends State<HalamanDetail> {
                   const SizedBox(height: 24),
 
                   // TOMBOL TAMBAH KE KERANJANG
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Tambahkan ke CartBloc
-                        context.read<CartBloc>().add(AddToCart(widget.produk));
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Tambahkan ke CartBloc
+                              context.read<CartBloc>().add(
+                                AddToCart(widget.produk),
+                              );
 
-                        // Tampilkan SnackBar
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              '${widget.produk.nama} ditambahkan ke keranjang!',
+                              // Tampilkan SnackBar
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '${widget.produk.nama} ditambahkan ke keranjang!',
+                                  ),
+                                  backgroundColor: Colors.green,
+                                  duration: const Duration(seconds: 2),
+                                  action: SnackBarAction(
+                                    label: 'Lihat',
+                                    textColor: Colors.white,
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ),
+                              );
+
+                              // Kembali ke halaman sebelumnya
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 2,
                             ),
-                            backgroundColor: Colors.green,
-                            duration: const Duration(seconds: 2),
-                            action: SnackBarAction(
-                              label: 'Lihat',
-                              textColor: Colors.white,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+                            child: const Text(
+                              'TAMBAH KE KERANJANG',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        );
-
-                        // Kembali ke halaman sebelumnya
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
                         ),
-                        elevation: 2,
                       ),
-                      child: const Text(
-                        'TAMBAH KE KERANJANG',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Tombol untuk melihat lokasi penjual terkait produk ini
+                  SizedBox(
+                    width: double.infinity,
+                    height: 44,
+                    child: OutlinedButton.icon(
+                      onPressed: () async {
+                        // Cari lokasi penjual berdasarkan kategori (jika makanan) atau nama produk
+                        List results = [];
+                        if (widget.produk is Makanan) {
+                          final kategori = (widget.produk as Makanan).kategori;
+                          results =
+                              await LokasiPenjualService.cariLokasiPenjualByKategori(
+                                kategori,
+                              );
+                        } else {
+                          results =
+                              await LokasiPenjualService.cariLokasiPenjualByNama(
+                                widget.produk.nama,
+                              );
+                        }
+
+                        if (results.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Lokasi penjual tidak ditemukan.'),
+                            ),
+                          );
+                          return;
+                        }
+
+                        final filterIds = results.map((e) => e.id).toList();
+                        final focusId = filterIds.first;
+
+                        // Buka halaman lokasi dan fokus ke penjual pertama
+                        context.pushNamed(
+                          'lokasi',
+                          extra: {'filterIds': filterIds, 'focusId': focusId},
+                        );
+                      },
+                      icon: const Icon(Icons.location_on, color: Colors.orange),
+                      label: const Text('Lihat Lokasi Penjual'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.orange,
+                        side: const BorderSide(color: Colors.orange),
                       ),
                     ),
                   ),
