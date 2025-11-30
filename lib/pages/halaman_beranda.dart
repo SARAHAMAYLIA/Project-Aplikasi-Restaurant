@@ -4,10 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:menu_makanan/bloc/cart_bloc.dart';
 import 'package:menu_makanan/bloc/cart_event.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:menu_makanan/model/dummydata.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
+import 'package:menu_makanan/pages/halaman_beranda_example_api.dart';
 
 class HalamanBeranda extends StatefulWidget {
   final Keranjang keranjang;
@@ -129,6 +131,9 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
             ),
           ),
         ),
+
+        // Latest meals from TheMealDB (connected to the same search box)
+        MealFromApiWidget(searchQuery: _searchQuery),
 
         // Sort Dropdown
         Container(

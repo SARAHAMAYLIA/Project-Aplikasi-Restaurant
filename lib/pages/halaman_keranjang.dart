@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:menu_makanan/bloc/cart_bloc.dart';
 import 'package:menu_makanan/bloc/cart_event.dart';
 import 'package:menu_makanan/bloc/cart_state.dart';
-import 'package:menu_makanan/halaman_buktitransaksi.dart';
 import 'package:go_router/go_router.dart';
 import 'package:menu_makanan/model/keranjang.dart';
 import 'package:menu_makanan/model/produk.dart';
@@ -300,8 +299,6 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
 
   @override
   Widget build(BuildContext context) {
-    final isSmallScreen = MediaQuery.of(context).size.width < 360;
-
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         return Scaffold(
@@ -524,8 +521,6 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
   }
 
   Widget _buildMobileCartItem(ItemKeranjang item, double subtotal, int index) {
-    final isSmallScreen = MediaQuery.of(context).size.width < 360;
-
     return Dismissible(
       key: Key('${item.produk.id}_$index'),
       background: Container(

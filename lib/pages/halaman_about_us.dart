@@ -68,13 +68,9 @@ class ProfilePic extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomRight,
         children: [
-          CircleAvatar(
-            radius: 50,
-            backgroundImage: AssetImage(image),
-          ), // Changed to AssetImage for local assets
+          CircleAvatar(radius: 50, backgroundImage: AssetImage(image)),
           if (isShowPhotoUpload)
             InkWell(
-              // Conditionally render the upload button
               onTap: imageUploadBtnPress,
               child: CircleAvatar(
                 radius: 13,
@@ -118,9 +114,7 @@ class Info extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
               softWrap: true,
               overflow: TextOverflow.visible,
-              maxLines: isMobile
-                  ? 2
-                  : 1, 
+              maxLines: isMobile ? 2 : 1,
               textAlign: TextAlign.right,
             ),
           ),

@@ -6,8 +6,6 @@ import 'package:menu_makanan/bloc/cart_event.dart';
 import 'package:menu_makanan/model/makanan.dart';
 import 'package:menu_makanan/model/minuman.dart';
 import 'package:menu_makanan/model/produk.dart';
-import 'package:menu_makanan/services/lokasi_penjual_service.dart';
-import 'package:go_router/go_router.dart';
 import 'package:animated_rating_stars/animated_rating_stars.dart';
 
 class HalamanDetail extends StatefulWidget {
@@ -195,46 +193,6 @@ class _HalamanDetailState extends State<HalamanDetail> {
                     ],
                   ),
                   const SizedBox(height: 8),
-
-                  // Tombol untuk melihat lokasi penjual terkait produk ini
-                  SizedBox(
-                    width: double.infinity,
-                    height: 44,
-                    child: OutlinedButton.icon(
-                      onPressed: () async {
-                        // Cari lokasi penjual berdasarkan nama menu (cocok untuk Makanan & Minuman)
-                        List results = [];
-                        results =
-                            await LokasiPenjualService.cariLokasiPenjualByNamaMenu(
-                              widget.produk.nama,
-                            );
-
-                        if (results.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Lokasi penjual tidak ditemukan.'),
-                            ),
-                          );
-                          return;
-                        }
-
-                        final filterIds = results.map((e) => e.id).toList();
-                        final focusId = filterIds.first;
-
-                        // Buka halaman lokasi dan fokus ke penjual pertama
-                        context.pushNamed(
-                          'lokasi',
-                          extra: {'filterIds': filterIds, 'focusId': focusId},
-                        );
-                      },
-                      icon: const Icon(Icons.location_on, color: Colors.orange),
-                      label: const Text('Lihat Lokasi Penjual'),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.orange,
-                        side: const BorderSide(color: Colors.orange),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),

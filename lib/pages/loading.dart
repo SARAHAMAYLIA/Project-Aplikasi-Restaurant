@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:menu_makanan/halaman_login.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
@@ -68,7 +67,6 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     // Menggunakan MediaQuery untuk responsive design
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenHeight < 700;
 
     return Scaffold(

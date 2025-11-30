@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:menu_makanan/bloc/cart_bloc.dart';
 import 'package:menu_makanan/bloc/cart_event.dart';
 import 'package:menu_makanan/bloc/cart_state.dart';
-import 'package:menu_makanan/halaman_beranda.dart';
-import 'package:menu_makanan/halaman_keranjang.dart';
+import 'package:menu_makanan/pages/halaman_beranda.dart';
+import 'package:menu_makanan/pages/halaman_keranjang.dart';
 // Keranjang model now taken from CartBloc state; no direct import needed here
 import 'package:menu_makanan/tombol/profil.dart';
 import 'package:menu_makanan/tombol/pengaturan.dart';

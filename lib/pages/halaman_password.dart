@@ -1,6 +1,5 @@
-import 'package:menu_makanan/halaman_login.dart';
 import 'package:flutter/material.dart';
-import 'main.dart';
+import 'package:menu_makanan/main.dart';
 import 'package:go_router/go_router.dart';
 
 class HalamanLupaPassword extends StatefulWidget {
